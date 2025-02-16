@@ -7,9 +7,7 @@ exports.getEmployees = async (req, res, next) => {
 };
 
 // TODO
-exports.deleteEmployee = async (req, res, next) => {
-};
+exports.deleteEmployee = async (req, res, next) => {};
 
 // TODO
-exports.createEmployee = async (req, res, next) => {
-};
+exports.createEmployee = async (req, res, next) => {};

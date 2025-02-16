@@ -7,7 +7,6 @@ const cors = require('cors')
 app.use(express.json())
 app.use(cors())
 
-
 const employeeRoutes = require('./routes/employee')
 
 // Mount routers
