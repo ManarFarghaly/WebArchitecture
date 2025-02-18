@@ -32,8 +32,8 @@ function fetchEmployees() {
 // TODO
 // add event listener to submit button
 const employeeForm = document.querySelector('#employeeForm');
-employeeForm.addEventListener('submit', async (e)=>{
-  e.preventDefault();
+employeeForm.addEventListener('submit', async (e)=>{  
+  e.preventDefault(); // Prevent reloading of the page
   await createEmployee();
   employeeForm.reset();
 });
@@ -56,26 +56,32 @@ async function createEmployee (){
   try{
     const name = document.getElementById('name').value;
     const id = document.getElementById('id').value;
+    if (!id || !name){
+      alert("Id and Name are required");
+      return;
+    }
+    if(!isNaN(name)) {
+      alert("Name must be a valid string, not a number"); 
+      return;
+    }
     // send data to BE
     const response = await fetch('http://localhost:3000/api/v1/employee', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ name: name, id: id }), //converts the js into json
-    });
-    // call fetchEmployees
-    console.log(response)
-    if (response.ok) {
-      fetchEmployees();
-      alert('Employee created successfully');
-    }else{
-      console.log(error);
-      alert("Employee with this ID already exists")
-    }
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({ name: name, id: id }) //converts the js into json
+  });
+  const data = await response.json();
+  if(!response.ok){
+    alert(data.error);
+    return;
+  }
+  fetchEmployees();
+  alert(data.message);
 }catch (error) {
   console.error(error);
-  alert('Failed to create employee. Please try again later.');
+  alert('Failed to create employee. Please try again later');
 }
 }
 
@@ -83,25 +89,24 @@ async function createEmployee (){
 async function deleteEmployee (employeeId){
   try{
     // get id
-    const id = employeeId
+    const id = employeeId;
     // send id to BE
     const response = await fetch(`http://localhost:3000/api/v1/employee/${id}`, {
       method: 'DELETE',
       headers: {
         'Content-Type': 'application/json',
-      },
+      }
     });
-    console.log(response)
-    // call fetchEmployees
-    if (response.ok) {
-      fetchEmployees();
-      alert('Employee deleted successfully');
-    }else{
-      console.log(error);
+    const data = await response.json();
+    if(!response.ok){
+      alert(data.error);
     }
+    // call fetchEmployees
+    fetchEmployees();
+    alert(data.message);
   }catch(error){
     console.error(error);
-    alert("Failed to delete employee")
+    alert("Failed to delete employee");
   }
 }
-fetchEmployees()
+fetchEmployees();
