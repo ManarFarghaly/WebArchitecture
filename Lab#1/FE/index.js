@@ -74,7 +74,7 @@ async function createEmployee (){
   });
   const data = await response.json();
   if(!response.ok){
-    alert(data.error);
+    alert(data.message);
     return;
   }
   fetchEmployees();
@@ -99,7 +99,7 @@ async function deleteEmployee (employeeId){
     });
     const data = await response.json();
     if(!response.ok){
-      alert(data.error);
+      alert(data.message);
     }
     // call fetchEmployees
     fetchEmployees();
